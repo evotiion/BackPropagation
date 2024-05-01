@@ -81,7 +81,7 @@ yvalsPred10 = calcNN(xpoints[10],0, weight3, weight4)
 learningRate = .1
 bias3 = 0
 stepSize = -100
-while (stepSize < -.001):
+while (stepSize < 5):
     yvals[0] = calcNN(xpoints[0], bias3, weight3, weight4)
     y11 = y1
     y21 = y2
@@ -102,18 +102,22 @@ while (stepSize < -.001):
     #Put Code Here************
     #print("pre bias3: " + str(bias3))
 
-    dSSR_dw3 = -2 * (yvalsObs0 - (yvalsPred0 + bias3)) * y11
-    dSSR_dw3 += -2 * (yvalsObs5 - (yvalsPred5 + bias3)) * y12
-    dSSR_dw3 += -2 * (yvalsObs10 - (yvalsPred10 + bias3)) * y13
+    dSSR_dw3 = -2 * (yvalsObs0 - (y11*weight3 + y21*weight4 + bias3)) * y11
+    dSSR_dw3 += -2 * (yvalsObs5 - (y12*weight3 + y22*weight4 + bias3)) * y12
+    dSSR_dw3 += -2 * (yvalsObs10 - (y13*weight3 + y23*weight4 + bias3)) * y13
+    print("dSSR_dw3: " + str(dSSR_dw3))
 
 
-    dSSR_dw4 = -2 * (yvalsObs0 - (yvalsPred0 + bias3)) * y21
-    dSSR_dw4 += -2 * (yvalsObs5 - (yvalsPred5 + bias3)) * y22
-    dSSR_dw4 += -2 * (yvalsObs10 - (yvalsPred10 + bias3)) * y23
+    dSSR_dw4 = -2 * (yvalsObs0 - (y11*weight3 + y21*weight4 + bias3)) * y21
+    dSSR_dw4 += -2 * (yvalsObs5 - (y12*weight3 + y22*weight4 + bias3)) * y22
+    dSSR_dw4 += -2 * (yvalsObs10 - (y13*weight3 + y23*weight4 + bias3)) * y23
+    print("dSSR_dw4: " + str(dSSR_dw4))
+
 
     SSR = -2*(yvalsObs0-(yvalsPred0+bias3))*1
     SSR += -2*(yvalsObs5-(yvalsPred5+bias3))*1
     SSR += -2*(yvalsObs10-(yvalsPred10+bias3))*1
+    print("SSR: " + str(SSR))
 
     stepSize = dSSR_dw3 * learningRate
     weight3 = weight3 - stepSize
@@ -121,18 +125,14 @@ while (stepSize < -.001):
     stepSize = dSSR_dw4 * learningRate
     weight4 = weight4 - stepSize
 
-
     stepSize = SSR * learningRate
     bias3 = bias3 - stepSize
 
+    print("stepSize: " + str(stepSize))
     print("weight3: " + str(weight3))
     print("weight4: " + str(weight4))
     print("bias3: " + str(bias3))
 
-
-    # print("stepSize: " + str(stepSize))
-    # print("SSR: " + str(SSR))
-    # print("post bias3: " + str(bias3))
 
     ypoints = np.array(yvals)
     plt.plot(xpoints, ypoints, marker="o", color="red")
